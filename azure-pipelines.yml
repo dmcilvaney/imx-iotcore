@@ -39,10 +39,12 @@ jobs:
     steps:
     - script: |
         sudo apt-get install build-essential python python-dev python-crypto python-wand device-tree-compiler bison flex swig iasl uuid-dev wget git bc libssl-dev
+      displayName: Install tools
 
     - script: |
         wget https://releases.linaro.org/components/toolchain/binaries/6.4-2017.11/arm-linux-gnueabihf/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf.tar.xz
         tar xf gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf.tar.xz
+      displayName: Download and install linaro gcc
 
     - script: |
         pushd ..
@@ -54,10 +56,27 @@ jobs:
         git clone https://github.com/Microsoft/MSRsec.git
         git clone --recursive https://github.com/tianocore/edk2
         popd
+      displayName: Clone repos
 
 
     # Builds all components except the final HAB signed SPL (Need to find a way to store the NXP code signing tools)
     - script: |
+        echo build/firmware/$(Target)
         ls
         cd build/firmware/$(Target)
-        make update_tas uefi_fit image.fit CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
+        make image.fit CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
+      displayName: Build U-Boot + OP-TEE
+
+    - script: |
+        echo build/firmware/$(Target)
+        ls
+        cd build/firmware/$(Target)
+        make update_tas CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
+      displayName: Build TAs
+
+    - script: |
+        echo build/firmware/$(Target)
+        ls
+        cd build/firmware/$(Target)
+        make uefi_fit CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
+      displayName: Build UEFI
