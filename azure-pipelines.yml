@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - script: |
-         build-essential device-tree-compiler bison flex swig iasl uuid-dev wget git bc libssl-dev zlib1g-dev
+        sudo apt-get install build-essential device-tree-compiler bison flex swig iasl uuid-dev wget git bc libssl-dev zlib1g-dev
       displayName: Download tools
 
     - script: |
