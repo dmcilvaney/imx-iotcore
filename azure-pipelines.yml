@@ -13,11 +13,25 @@ jobs:
 
     steps:
     - script: |
+        sudo apt-get update
         sudo apt-get install build-essential device-tree-compiler bison flex swig iasl uuid-dev wget git bc libssl-dev zlib1g-dev
       displayName: Download tools
 
     - script: |
         sudo apt-get install python python-dev python-crypto python-wand python3-pip python3-setuptools
+        sudo apt-get install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget
+        pushd ..
+        wget https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz
+        tar -xf Python-3.6.8.tar.xz
+
+        python3 --version
+        cd Python-3.6.8
+        ./configure --enable-optimizations
+        make
+        sudo make install
+        popd
+        python3 --version
+
         sudo python3 -m pip install --upgrade pip
         sudo python3 -m pip install --upgrade setuptools
         sudo python3 -m pip install mu_environment
