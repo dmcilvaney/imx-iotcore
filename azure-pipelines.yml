@@ -21,20 +21,20 @@ jobs:
         sudo apt-get install python python-dev python-crypto python-wand python3-pip python3-setuptools
         sudo apt-get install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget
         pushd ..
-        wget https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz
-        tar -xf Python-3.6.8.tar.xz
+        wget https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz
+        tar -xf Python-3.7.3.tar.xz
 
         python3 --version
-        cd Python-3.6.8
+        cd Python-3.7.3
         ./configure
         make build_all -j8
         sudo make altinstall
         popd
-        python3.6 --version
+        python3.7 --version
 
-        sudo python3.6 -m pip install --upgrade pip
-        sudo python3.6 -m pip install --upgrade setuptools
-        sudo python3.6 -m pip install mu_environment
+        sudo python3.7 -m pip install --upgrade pip
+        sudo python3.7 -m pip install --upgrade setuptools
+        sudo python3.7 -m pip install mu_environment
       displayName: Install Python components
 
     - script: |
@@ -116,7 +116,7 @@ jobs:
         make -C BaseTools
         cd ..
         export GCC5_BIN=$(Build.SourcesDirectory)/gcc-linaro-7.2.1-2017.11-x86_64_aarch64-linux-gnu/bin/
-        python3.6 NXP/MCIMX8M_EVK_4GB/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 BUILDREPORTING=TRUE BUILDREPORT_TYPES="PCD" TARGET=RELEASE MAX_CONCURRENT_THREAD_NUMBER=20 BLD_*_CONFIG_NOT_SECURE_UEFI=1
+        python3.7 NXP/MCIMX8M_EVK_4GB/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 BUILDREPORTING=TRUE BUILDREPORT_TYPES="PCD" TARGET=RELEASE MAX_CONCURRENT_THREAD_NUMBER=20 BLD_*_CONFIG_NOT_SECURE_UEFI=1
         cd Build/MCIMX8M_EVK_4GB/RELEASE_GCC5/FV
         cp $(Build.SourcesDirectory)/build/firmware/its/uefi_imx8_unsigned.its .
         $(Build.SourcesDirectory)/../u-boot/tools/mkimage -f uefi_imx8_unsigned.its -r uefi.fit
