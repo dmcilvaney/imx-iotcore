@@ -199,11 +199,11 @@ uefi: $(EDK2BASETOOLS)
 	echo $$PATH
 	export PATH=$(dir $(CROSS_COMPILE)):$$PATH
 	echo $$PATH
-	false
-	. edk2/edksetup.sh --reconfig
-	build -a ARM -t GCC5 -p Platform/$(EDK2_PLATFORM)/$(EDK2_DSC).dsc -b $(EDK2_DEBUG_RELEASE) $(EDK2_FLAGS)
-	popd
-	cp $(EDK2) .
+#	false
+#	. edk2/edksetup.sh --reconfig
+#	build -a ARM -t GCC5 -p Platform/$(EDK2_PLATFORM)/$(EDK2_DSC).dsc -b $(EDK2_DEBUG_RELEASE) $(EDK2_FLAGS)
+#	popd
+#	cp $(EDK2) .
 
 .PHONY: uefi_fit
 
@@ -227,12 +227,12 @@ $(EDK2BASETOOLS) edk2_basetools:
 	echo $$PATH
 	export PATH=$(dir $(CROSS_COMPILE)):$$PATH
 	echo $$PATH
-	false
-	pushd edk2
-	git clean -fdx
-	popd
-	. edk2/edksetup.sh --reconfig
-	$(MAKE) -C edk2/BaseTools -j 1
+#	false
+#	pushd edk2
+#	git clean -fdx
+#	popd
+#	. edk2/edksetup.sh --reconfig
+#	$(MAKE) -C edk2/BaseTools -j 1
 
 .PHONY: u-boot optee fTPM uefi edk2_basetools
 u-boot: $(UBOOT)
