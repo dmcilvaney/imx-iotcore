@@ -17,9 +17,8 @@ jobs:
       displayName: Download tools
 
     - script: |
-        pip3 install --upgrade pip
-        pip3 install mu_environment
-      displayName: Install Python packages
+        python3 -m pip install mu_environment
+      displayName: Install Python mu_environment package
 
     - script: |
         wget https://releases.linaro.org/components/toolchain/binaries/7.2-2017.11/aarch64-linux-gnu/gcc-linaro-7.2.1-2017.11-x86_64_aarch64-linux-gnu.tar.xz
