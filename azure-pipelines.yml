@@ -18,6 +18,8 @@ jobs:
 
     - script: |
         sudo apt-get install python python-dev python-crypto python-wand python3-pip python3-setuptools
+        python3 -m pip install --upgrade pip
+        python3 -m pip install --upgrade setuptools
         python3 -m pip install mu_environment
       displayName: Install Python components
 
