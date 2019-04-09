@@ -48,14 +48,16 @@ jobs:
 
     - script: |
         git clone --recursive https://github.com/ms-iot/imx-iotcore.git
-        git clone --recursive -b u-boot-imx https://github.com/ms-iot/u-boot.git
-        git clone -b ms-iot https://github.com/ms-iot/optee_os.git
-        git clone --recursive -b tcps-feature https://github.com/Microsoft/RIoT.git
         git clone -b imx https://github.com/ms-iot/imx-edk2-platforms.git
         git clone --recursive https://github.com/tianocore/edk2
-        git clone https://github.com/Microsoft/MSRsec.git
+
+#        git clone --recursive -b u-boot-imx https://github.com/ms-iot/u-boot.git
+#        git clone -b ms-iot https://github.com/ms-iot/optee_os.git
+#        git clone --recursive -b tcps-feature https://github.com/Microsoft/RIoT.git
+#        git clone https://github.com/Microsoft/MSRsec.git
 
     - script: |
         cd imx-iotcore/build/firmware/$(Target)
-        make update_tas CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
-        make CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
+        make uefi CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
+#        make update_tas CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
+#        make CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
