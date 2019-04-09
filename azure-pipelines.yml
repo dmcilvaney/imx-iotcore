@@ -27,7 +27,7 @@ jobs:
         python3 --version
         cd Python-3.6.8
         ./configure --enable-optimizations
-        make
+        make build_all -j8
         sudo make install
         popd
         python3 --version
