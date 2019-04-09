@@ -14,6 +14,7 @@ jobs:
     steps:
     - script: |
         sudo apt-get install build-essential python python-dev python-crypto python-wand device-tree-compiler bison flex swig iasl uuid-dev wget git bc libssl-dev zlib1g-dev python3-pip
+        pip3 install mu_environment
       displayName: Download tools
 
     - script: |
@@ -38,7 +39,7 @@ jobs:
         chmod +x firmware-imx-7.9.bin
         yes | ./firmware-imx-7.9.bin
         popd
-      displayName: NXP HDMI/DDR firmware
+      displayName: Install NXP HDMI/DDR firmware
 
     - script: |
         pushd ../u-boot
