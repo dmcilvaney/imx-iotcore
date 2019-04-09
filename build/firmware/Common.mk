@@ -196,14 +196,11 @@ uefi: $(EDK2BASETOOLS)
 	export WORKSPACE=$$PWD
 	export PACKAGES_PATH=$$PWD/edk2:$$PWD/imx-edk2-platforms
 	export GCC5_ARM_PREFIX=arm-linux-gnueabihf-
-	echo $$PATH
 	export PATH=$(dir $(CROSS_COMPILE)):$$PATH
-	echo $$PATH
-#	false
-#	. edk2/edksetup.sh --reconfig
-#	build -a ARM -t GCC5 -p Platform/$(EDK2_PLATFORM)/$(EDK2_DSC).dsc -b $(EDK2_DEBUG_RELEASE) $(EDK2_FLAGS)
-#	popd
-#	cp $(EDK2) .
+	. edk2/edksetup.sh --reconfig
+	build -a ARM -t GCC5 -p Platform/$(EDK2_PLATFORM)/$(EDK2_DSC).dsc -b $(EDK2_DEBUG_RELEASE) $(EDK2_FLAGS)
+	popd
+	cp $(EDK2) .
 
 .PHONY: uefi_fit
 
@@ -224,15 +221,12 @@ $(EDK2BASETOOLS) edk2_basetools:
 	export WORKSPACE=$$PWD
 	export PACKAGES_PATH=$$PWD/edk2:$$PWD/imx-edk2-platforms
 	export GCC5_ARM_PREFIX=arm-linux-gnueabihf-
-	echo $$PATH
 	export PATH=$(dir $(CROSS_COMPILE)):$$PATH
-	echo $$PATH
-#	false
-#	pushd edk2
-#	git clean -fdx
-#	popd
-#	. edk2/edksetup.sh --reconfig
-#	$(MAKE) -C edk2/BaseTools -j 1
+	pushd edk2
+	git clean -fdx
+	popd
+	. edk2/edksetup.sh --reconfig
+	$(MAKE) -C edk2/BaseTools -j 1
 
 .PHONY: u-boot optee fTPM uefi edk2_basetools
 u-boot: $(UBOOT)
