@@ -37,31 +37,28 @@ jobs:
           TargeT: VAB820_iMX6Q_1GB
 
     steps:
-#    - checkout: none
-
     - script: |
         sudo apt-get install build-essential python python-dev python-crypto python-wand device-tree-compiler bison flex swig iasl uuid-dev wget git bc libssl-dev
 
-#    - script: |
-#        wget https://releases.linaro.org/components/toolchain/binaries/6.4-2017.11/arm-linux-gnueabihf/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf.tar.xz
-#        tar xf gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf.tar.xz
+    - script: |
+        wget https://releases.linaro.org/components/toolchain/binaries/6.4-2017.11/arm-linux-gnueabihf/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf.tar.xz
+        tar xf gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf.tar.xz
 
     - script: |
         pushd ..
         git clone -b imx https://github.com/ms-iot/imx-edk2-platforms.git
+        git clone --recursive https://github.com/dmcilvaney/imx-iotcore.git
+        git clone --recursive -b u-boot-imx https://github.com/ms-iot/u-boot.git
+        git clone -b ms-iot https://github.com/ms-iot/optee_os.git
+        git clone --recursive -b tcps-feature https://github.com/Microsoft/RIoT.git
+        git clone https://github.com/Microsoft/MSRsec.git
+        git clone --recursive https://github.com/tianocore/edk2
         popd
-#        git clone --recursive https://github.com/tianocore/edk2
-#        popd
 
-#        git clone --recursive https://github.com/dmcilvaney/imx-iotcore.git
-#        git clone --recursive -b u-boot-imx https://github.com/ms-iot/u-boot.git
-#        git clone -b ms-iot https://github.com/ms-iot/optee_os.git
-#        git clone --recursive -b tcps-feature https://github.com/Microsoft/RIoT.git
-#        git clone https://github.com/Microsoft/MSRsec.git
+
 
     - script: |
         ls
         cd build/firmware/$(Target)
-        make uefi CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
-#        make update_tas CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
-#        make CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
+        make update_tas CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
+        make CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
