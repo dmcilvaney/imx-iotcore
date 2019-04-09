@@ -16,7 +16,6 @@ jobs:
         sudo apt-get install build-essential python python-dev python-crypto python-wand device-tree-compiler bison flex swig iasl uuid-dev wget git bc libssl-dev zlib1g-dev python3-pip
       displayName: Download tools
 
-    steps:
     - script: |
         pip3 install --upgrade pip
         pip3 install mu_environment
