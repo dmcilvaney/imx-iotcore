@@ -14,8 +14,13 @@ jobs:
     steps:
     - script: |
         sudo apt-get install build-essential python python-dev python-crypto python-wand device-tree-compiler bison flex swig iasl uuid-dev wget git bc libssl-dev zlib1g-dev python3-pip
-        pip3 install mu_environment
       displayName: Download tools
+
+    steps:
+    - script: |
+        pip3 install --upgrade pip
+        pip3 install mu_environment
+      displayName: Install Python packages
 
     - script: |
         wget https://releases.linaro.org/components/toolchain/binaries/7.2-2017.11/aarch64-linux-gnu/gcc-linaro-7.2.1-2017.11-x86_64_aarch64-linux-gnu.tar.xz
