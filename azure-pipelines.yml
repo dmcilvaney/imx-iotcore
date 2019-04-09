@@ -36,7 +36,7 @@ jobs:
         pushd ..
         wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-7.9.bin
         chmod +x firmware-imx-7.9.bin
-        ./firmware-imx-7.9.bin
+        yes | ./firmware-imx-7.9.bin
         popd
       displayName: NXP HDMI/DDR firmware
 
