@@ -37,7 +37,7 @@ jobs:
           TargeT: VAB820_iMX6Q_1GB
 
     steps:
-    - checkout: none
+#    - checkout: none
 
     - script: |
         sudo apt-get install build-essential python python-dev python-crypto python-wand device-tree-compiler bison flex swig iasl uuid-dev wget git bc libssl-dev
@@ -47,10 +47,11 @@ jobs:
         tar xf gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf.tar.xz
 
     - script: |
-        git clone --recursive https://github.com/ms-iot/imx-iotcore.git
+        cd ..
         git clone -b imx https://github.com/ms-iot/imx-edk2-platforms.git
         git clone --recursive https://github.com/tianocore/edk2
 
+#        git clone --recursive https://github.com/dmcilvaney/imx-iotcore.git
 #        git clone --recursive -b u-boot-imx https://github.com/ms-iot/u-boot.git
 #        git clone -b ms-iot https://github.com/ms-iot/optee_os.git
 #        git clone --recursive -b tcps-feature https://github.com/Microsoft/RIoT.git
@@ -58,6 +59,7 @@ jobs:
 
     - script: |
         cd imx-iotcore/build/firmware/$(Target)
+        git checkout azure-pipelines
         make uefi CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
 #        make update_tas CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
 #        make CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
