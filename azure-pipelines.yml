@@ -19,7 +19,7 @@ jobs:
 
     - script: |
         sudo apt-get install python python-dev python-crypto python-wand python3-pip python3-setuptools
-        sudo apt-get install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget
+        sudo apt-get install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget libsqlite3-dev
         pushd ..
         wget https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz
         tar -xf Python-3.7.3.tar.xz
