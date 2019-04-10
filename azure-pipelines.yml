@@ -119,23 +119,27 @@ jobs:
         python3.7 NXP/MCIMX8M_EVK_4GB/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 BUILDREPORTING=TRUE BUILDREPORT_TYPES="PCD" TARGET=RELEASE MAX_CONCURRENT_THREAD_NUMBER=20 BLD_*_CONFIG_NOT_SECURE_UEFI=1
 
     - script: |
+        echo "____"
         pushd ../mu_platform_nxp
         pwd
         ls
-        pushd
 
+        echo "____"
         cd Build
         pwd
         ls
 
+        echo "____"
         cd MCIMX8M_EVK_4G
         pwd
         ls
 
+        echo "____"
         cd RELEASE_GCC5
         pwd
         ls
 
+        echo "____"
         cd FV
         pwd
         ls
