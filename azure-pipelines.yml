@@ -116,12 +116,8 @@ jobs:
         make -C BaseTools
         cd ..
         export GCC5_BIN=$(Build.SourcesDirectory)/gcc-linaro-7.2.1-2017.11-x86_64_aarch64-linux-gnu/bin/
-        python3.7 NXP/MCIMX8M_EVK_4GB/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 BUILDREPORTING=TRUE BUILDREPORT_TYPES="PCD" TARGET=RELEASE MAX_CONCURRENT_THREAD_NUMBER=20 BLD_*_CONFIG_NOT_SECURE_UEFI=1 || echo "Build Failed? Log:"; cd Build; ls; cat ./BUILDLOG.txt
-
-        ls; cd Build
-        ls; cd MCIMX8M_EVK_4GB
-        ls; cd RELEASE_GCC5
-        ls; cd FV
+        python3.7 NXP/MCIMX8M_EVK_4GB/PlatformBuild.py TOOL_CHAIN_TAG=GCC5 BUILDREPORTING=TRUE BUILDREPORT_TYPES="PCD" TARGET=RELEASE MAX_CONCURRENT_THREAD_NUMBER=20 BLD_*_CONFIG_NOT_SECURE_UEFI=1
+        cd Build/MCIMX8M_EVK_4G/RELEASE_GCC5/FV
         cp $(Build.SourcesDirectory)/build/firmware/its/uefi_imx8_unsigned.its .
         $(Build.SourcesDirectory)/../u-boot/tools/mkimage -f uefi_imx8_unsigned.its -r uefi.fit
       displayName: Build UEFI
