@@ -207,7 +207,7 @@ uefi: $(EDK2BASETOOLS)
 # Generate an unsigned UEFI FIT
 uefi_fit: uefi | $(MKIMAGE)
 	cp -f ../its/$(UEFI_ITS) $(UEFI_ITS)
-	$(UBOOT_OUT)/tools/mkimage -f $(UEFI_ITS) -r uefi.fit
+	$(UBOOT_OUT)/tools/mkimage -f $(UEFI_ITS) -r $(UEFI_FIT)
 	rm -f $(UEFI_ITS)
 
 # Ensure that mkimage is available to build UEFI fits in isolation.
