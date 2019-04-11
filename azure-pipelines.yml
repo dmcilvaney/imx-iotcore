@@ -180,7 +180,7 @@ jobs:
         echo build/firmware/$(Target)
         ls
         cd build/firmware/$(Target)
-        make image.fit CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
+        make u-boot optee CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
       displayName: Build U-Boot + OP-TEE
 
     - script: |
@@ -196,3 +196,10 @@ jobs:
         cd build/firmware/$(Target)
         make uefi_fit CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
       displayName: Build UEFI
+
+    - script: |
+        echo build/firmware/$(Target)
+        ls
+        cd build/firmware/$(Target)
+        make image.fit CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
+      displayName: Initial FIT packaging
