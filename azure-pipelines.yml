@@ -2,6 +2,15 @@ trigger:
 - master
 
 jobs:
+  - job: ComponentGovernance
+    steps:
+    - script: |
+        python3 external/build_cgmanifest.py external/cgmanifest_template.json
+        cat cgmanifest.json
+      displayName: Generate dynamic cgmanifest.json
+      
+    - task: ComponentGovernanceComponentDetection@0
+
   - job: Build8
     displayName: Build iMX 8
     pool:
