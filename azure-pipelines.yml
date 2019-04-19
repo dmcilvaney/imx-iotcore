@@ -2,29 +2,6 @@ trigger:
 - master
 
 jobs:
-  - job: CollectCST
-    displayName: Aquire CST from secure storage
-    pool:
-      vmImage: 'Ubuntu-16.04'
-    steps:
-      - task: DownloadSecureFile@1
-        inputs:
-          secureFile: cst.tar.bz2.partaa
-
-      - task: DownloadSecureFile@1
-        inputs:
-          secureFile: cst.tar.bz2.partab
-
-      - script: |
-          cat $(Agent.TempDirectory)/cst.tar.bz2.parta* > cst.tar.bz2
-          tar -xvzf cst.tar.bz2
-
-      - task: PublishPipelineArtifact@0
-        inputs:
-          artifactName: 'cst'
-          targetPath: './cst'
-
-
   - job: Build8
     displayName: Build iMX 8
     pool:
@@ -187,8 +164,6 @@ jobs:
         VAB820_iMX6Q_1GB:
           TargeT: VAB820_iMX6Q_1GB
 
-    dependsOn: CollectCST
-
     steps:
     - script: |
         sudo apt-get install build-essential python python-dev python-crypto python-wand device-tree-compiler bison flex swig iasl uuid-dev wget git bc libssl-dev
@@ -198,6 +173,22 @@ jobs:
         wget https://releases.linaro.org/components/toolchain/binaries/6.4-2017.11/arm-linux-gnueabihf/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf.tar.xz
         tar xf gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf.tar.xz
       displayName: Download gcc
+
+    - task: DownloadSecureFile@1
+      inputs:
+        secureFile: cst.tar.bz2.partaa
+      displayName: CST1
+
+    - task: DownloadSecureFile@1
+      inputs:
+        secureFile: cst.tar.bz2.partab
+      displayName: CST2
+
+    - script: |
+        cd ..
+        cat $(Agent.TempDirectory)/cst.tar.bz2.parta* > cst.tar.bz2
+        tar -xvzf cst.tar.bz2
+      displayName: combine
 
     - script: |
         pushd ..
@@ -241,8 +232,8 @@ jobs:
         echo build/firmware/$(Target)
         ls
         cd build/firmware/$(Target)
-        make image.fit CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
-      displayName: Initial FIT packaging
+        make CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
+      displayName: Final packaging
 
     - script: |
         python3 external/build_cgmanifest.py external/cgmanifest_template.json
@@ -252,9 +243,9 @@ jobs:
     - task: ComponentGovernanceComponentDetection@0
 
   - job: Build67FFU
-    displayName: Build iMX 6 & 7
+    displayName: Build iMX 6 & 7 FFU
     pool:
-      vmImage: 'Ubuntu-16.04'
+      vmImage: 'vs2017-win2016'
     strategy:
       matrix:
         ClSomImx7_iMX7D_1GB:
@@ -277,5 +268,7 @@ jobs:
           Target: UdooNeo_iMX6SX_1GB
         VAB820_iMX6Q_1GB:
           TargeT: VAB820_iMX6Q_1GB
+
+    dependsOn: Build67Firmware
     steps:
     - task: ComponentGovernanceComponentDetection@0
