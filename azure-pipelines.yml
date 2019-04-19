@@ -277,5 +277,5 @@ jobs:
           Target: UdooNeo_iMX6SX_1GB
         VAB820_iMX6Q_1GB:
           TargeT: VAB820_iMX6Q_1GB
-
+    steps:
     - task: ComponentGovernanceComponentDetection@0
