@@ -202,12 +202,6 @@ jobs:
         popd
       displayName: Clone repos
 
-    - task: DownloadPipelineArtifact@1
-      inputs:
-        artifactName: 'cst'
-        downloadPath: './'
-
-    # Builds all components except the final HAB signed SPL (Need to find a way to store the NXP code signing tools)
     - script: |
         echo build/firmware/$(Target)
         ls
