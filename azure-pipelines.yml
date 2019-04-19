@@ -2,6 +2,29 @@ trigger:
 - master
 
 jobs:
+  - job: CollectCST
+    displayName: Aquire CST from secure storage
+    pool:
+      vmImage: 'Ubuntu-16.04'
+    steps:
+      - task: DownloadSecureFile@1
+        inputs:
+          secureFile: cst.tar.bz2.partaa
+
+      - task: DownloadSecureFile@1
+        inputs:
+          secureFile: cst.tar.bz2.partab
+
+      - script: |
+          cat $(Agent.TempDirectory)/cst.tar.bz2.parta* > cst.tar.bz2
+          tar -xvzf cst.tar.bz2
+
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: 'cst'
+        targetPath: './cst'
+
+
   - job: Build8
     displayName: Build iMX 8
     pool:
@@ -137,7 +160,7 @@ jobs:
     - task: ComponentGovernanceComponentDetection@0
 
 
-  - job: Build67
+  - job: Build67Firmware
     displayName: Build iMX 6 & 7
     pool:
       vmImage: 'Ubuntu-16.04'
@@ -164,6 +187,8 @@ jobs:
         VAB820_iMX6Q_1GB:
           TargeT: VAB820_iMX6Q_1GB
 
+    dependsOn: CollectCST
+
     steps:
     - script: |
         sudo apt-get install build-essential python python-dev python-crypto python-wand device-tree-compiler bison flex swig iasl uuid-dev wget git bc libssl-dev
@@ -185,6 +210,10 @@ jobs:
         popd
       displayName: Clone repos
 
+    - task: DownloadPipelineArtifact@1
+      inputs:
+        artifactName: 'cst'
+        downloadPath: './'
 
     # Builds all components except the final HAB signed SPL (Need to find a way to store the NXP code signing tools)
     - script: |
@@ -220,4 +249,33 @@ jobs:
         cat cgmanifest.json
       displayName: Generate dynamic Component Governance cgmanifest.json
       
+    - task: ComponentGovernanceComponentDetection@0
+
+  - job: Build67FFU
+    displayName: Build iMX 6 & 7
+    pool:
+      vmImage: 'Ubuntu-16.04'
+    strategy:
+      matrix:
+        ClSomImx7_iMX7D_1GB:
+          Target: ClSomImx7_iMX7D_1GB
+        HummingBoardEdge_iMX6DL_1GB:
+          Target: HummingBoardEdge_iMX6DL_1GB
+        HummingBoardEdge_iMX6Q_2GB:
+          Target: HummingBoardEdge_iMX6Q_2GB
+        HummingBoardEdge_iMX6S_512MB:
+          Target: HummingBoardEdge_iMX6S_512MB
+        Sabre_iMX6Q_1GB:
+          Target: Sabre_iMX6Q_1GB
+        Sabre_iMX6QP_1GB:
+          Target: Sabre_iMX6QP_1GB
+        Sabre_iMX7D_1GB:
+          Target: Sabre_iMX7D_1GB
+        SabreLite_iMX6Q_1GB:
+          Target: SabreLite_iMX6Q_1GB
+        UdooNeo_iMX6SX_1GB:
+          Target: UdooNeo_iMX6SX_1GB
+        VAB820_iMX6Q_1GB:
+          TargeT: VAB820_iMX6Q_1GB
+
     - task: ComponentGovernanceComponentDetection@0
