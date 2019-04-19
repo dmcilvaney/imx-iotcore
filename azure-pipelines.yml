@@ -19,10 +19,10 @@ jobs:
           cat $(Agent.TempDirectory)/cst.tar.bz2.parta* > cst.tar.bz2
           tar -xvzf cst.tar.bz2
 
-    - task: PublishPipelineArtifact@0
-      inputs:
-        artifactName: 'cst'
-        targetPath: './cst'
+      - task: PublishPipelineArtifact@0
+        inputs:
+          artifactName: 'cst'
+          targetPath: './cst'
 
 
   - job: Build8
