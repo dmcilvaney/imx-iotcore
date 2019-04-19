@@ -1,5 +1,6 @@
 Windows 10 IoT Core for NXP i.MX Processors
 ==============
+[![Build Status](https://dev.azure.com/damcilva/damcilva/_apis/build/status/dmcilvaney.imx-iotcore?branchName=azure-pipelines)](https://dev.azure.com/damcilva/damcilva/_build/latest?definitionId=2&branchName=azure-pipelines)
 
 **Important! Please read this section first.**
 
