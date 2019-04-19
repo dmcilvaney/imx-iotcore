@@ -188,7 +188,8 @@ jobs:
         cd ..
         cat $(Agent.TempDirectory)/cst.tar.bz2.parta* > cst.tar.bz2
         tar -xvzf cst.tar.bz2
-      displayName: combine
+        ls
+      displayName: Combine cst
 
     - script: |
         pushd ..
@@ -235,6 +236,17 @@ jobs:
         make CROSS_COMPILE=$(Build.SourcesDirectory)/gcc-linaro-6.4.1-2017.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
       displayName: Final packaging
 
+
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: '$(Target)_firmware_fit.merged'
+        targetPath: 'build/firmware/$(Target)/firmware_fit.merged'
+
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: '$(Target)_uefi.fit'
+        targetPath: 'build/firmware/$(Target)/uefi.fit'
+
     - script: |
         python3 external/build_cgmanifest.py external/cgmanifest_template.json
         cat cgmanifest.json
@@ -271,4 +283,18 @@ jobs:
 
     dependsOn: Build67Firmware
     steps:
+    - task: DownloadPipelineArtifact@1
+      inputs:
+        artifactName: '$(Target)_firmware_fit.merged'
+        downloadPath: '$(System.ArtifactsDirectory)/$(ArtifactName)'
+
+    - task: DownloadPipelineArtifact@1
+      inputs:
+        artifactName: '$(Target)_firmware_fit.merged'
+        downloadPath: '$(System.ArtifactsDirectory)/$(Target)'
+
+    - script: |
+        cd $(System.ArtifactsDirectory)/$(Target)
+        dir
+
     - task: ComponentGovernanceComponentDetection@0
