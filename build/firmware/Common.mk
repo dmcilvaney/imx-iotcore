@@ -376,6 +376,7 @@ verify_case_sensitivity: verify_case_sensitivity_$(UBOOT_OUT) verify_case_sensit
 CASE_DIR=$(subst verify_case_sensitivity_,,$@)
 CASE_DIR_WIN=$(shell wslpath -m $(CASE_DIR))
 CASE_SENSITIVITY_CMD=fsutil.exe file queryCaseSensitiveInfo $(CASE_DIR_WIN) | grep -o
+CASE_SENSITIVITY_CMD_V2=getfattr -n system.wsl_case_sensitive --absolute-names $(CASE_DIR) | grep -o
 MOUNT_BASE_DIRECTORY=$(shell echo $(CASE_DIR) | cut -d "/" -f1-3)
 MOUNT_CASE_SENSITIVITY_CMD=mount | grep "$(MOUNT_BASE_DIRECTORY)" | grep -o
 IS_ADMIN_CMD=net.exe session 2>&1 >/dev/null | grep -o
@@ -392,6 +393,22 @@ else
 	  echo Auto mount case sensitivity is enabled
 	  exit 0;
 	fi
+
+	if test "which getfattr"
+	then
+	  echo getfattr available $(CASE_DIR)
+	  if test "`$(CASE_SENSITIVITY_CMD_V2) system.wsl_case_sensitive=\\"0\\"`"
+	  then
+	    echo Setting case sensitivity enabled on $(CASE_DIR) using setfattr
+	    sudo setfattr -n system.wsl_case_sensitive -v 1 $(CASE_DIR) && exit 0 || echo Failed to run setfattr, falling back to PS.
+	  fi
+
+	  if test "`$(CASE_SENSITIVITY_CMD_V2) system.wsl_case_sensitive=\\"1\\"`"
+	  then
+	    echo Directory already has case sensitivity enabled
+	    exit 0;
+	  fi;
+	fi;
 
 	if test "`$(CASE_SENSITIVITY_CMD) "is enabled"`"
 	then
