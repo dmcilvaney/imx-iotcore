@@ -3,6 +3,7 @@
 .ONESHELL:
 SHELL = bash
 .SHELLFLAGS = -ec
+export SHELLOPTS:=$(if $(SHELLOPTS),$(SHELLOPTS):)pipefail:errexit
 
 # Paths to dependent repositories
 REPO_ROOT=../../..
@@ -42,6 +43,8 @@ TA_VERSIONS=$(AUTHVARS_BIN_PLACE)/firmwareversions.log $(FTPM_BIN_PLACE)/firmwar
 
 # Toolchain checks to see if EDK2 Basetools or U-Boot need to build
 EDK2BASETOOLS=$(REPO_ROOT)/../edk2/Conf/BuildEnv.sh
+EDK2_MUTEX_INFO=$(abspath $(REPO_ROOT)/../edk2/Conf/mutex_$(subst /,,$(EDK2_PLATFORM)))
+EDK2_MUTEX=$(abspath $(REPO_ROOT)/../edk2/Conf/mutex)
 MKIMAGE=$(UBOOT_OUT)/tools/mkimage
 
 # Signing parameters for mkimage FIT generation
@@ -208,7 +211,22 @@ $(SPL_PUB_KEYED): $(UBOOT_OPTEE_FIT)
 
 # Build the EDK2 UEFI target for the board specified by $(EDK2_DSC) and $(EDK2_PLATFORM)
 # Copy the output binary into the board firmware folder for FIT generation
-uefi: $(EDK2BASETOOLS)
+uefi: uefi_mutex $(EDK2BASETOOLS)
+	function cleanup_mutex {
+		echo Cleaning up mutex for $(EDK2_PLATFORM)
+		while [ -d $(EDK2_MUTEX) ]
+		do
+			rm -rf $(EDK2_MUTEX)
+		done
+		while [ -f $(EDK2_MUTEX_INFO) ]
+		do
+			rm -f $(EDK2_MUTEX_INFO)
+		done
+		echo Done
+	}
+	trap cleanup_mutex EXIT
+	touch $(EDK2_MUTEX_INFO)
+
 	@+pushd $(REPO_ROOT)/..
 	export WORKSPACE=$$PWD
 	export PACKAGES_PATH=$$PWD/edk2:$$PWD/imx-edk2-platforms
@@ -219,7 +237,16 @@ uefi: $(EDK2BASETOOLS)
 	popd
 	cp $(EDK2) .
 
-.PHONY: uefi_fit
+.PHONY: uefi_fit  uefi_mutex
+
+uefi_mutex:
+	echo Waiting on MUTEX $(EDK2_MUTEX) to build $(EDK2_PLATFORM)
+	while ! mkdir $(EDK2_MUTEX) &> /dev/null
+	do
+		sleep 1
+	done
+	echo Aquired mutex for $(EDK2_PLATFORM)!
+	exit $$([ -d $(EDK2_MUTEX) ])
 
 # Generate an unsigned UEFI FIT
 uefi_fit: uefi | $(MKIMAGE)
